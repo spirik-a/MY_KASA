@@ -1,422 +1,359 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uk">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CyberShield — Password & data protection for teams</title>
-<meta name="description" content="CyberShield is a password manager and data protection suite for teams and individuals. Zero-knowledge encryption, instant autofill, simple admin controls.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+<title>Каса — гроші, інвойси та податки в одному застосунку</title>
+<meta name="description" content="Каса допомагає фрилансерам і малому бізнесу виставляти рахунки, бачити рух грошей і вчасно платити податки.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='26' fill='%232B50FF'/><path d='M32 24v52M70 26 42 50l28 26' stroke='white' stroke-width='11' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#070b1a; --ink:#e9edff; --mute:#9aa4c7; --line:rgba(255,255,255,.12);
-  --glass:rgba(255,255,255,.05); --cyan:#22e3ff; --violet:#8b5cff; --ok:#3dffa2; --bad:#ff4d6d; --warn:#ffc24d;
-  --head:'Sora',system-ui,sans-serif; --body:'Figtree',system-ui,sans-serif;
+  --bg:#F6F8FC; --surface:#FFFFFF; --ink:#0F1B2D; --muted:#5B6A80; --line:#E3E8F0;
+  --blue:#2B50FF; --blue-d:#1D3ACC; --blue-t:#E8EDFF; --mint:#12B886; --mint-t:#DDF6EC; --amber:#F59F00;
+  --r:18px;
 }
 *{box-sizing:border-box;margin:0}
-html{scroll-behavior:smooth;color-scheme:dark}
-body{background:var(--bg);color:var(--ink);font:400 1.0625rem/1.6 var(--body);overflow-x:hidden;
-  background-image:radial-gradient(60rem 40rem at 85% -10%,rgba(139,92,255,.28),transparent 60%),radial-gradient(50rem 36rem at -10% 20%,rgba(34,227,255,.16),transparent 60%),linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
-  background-size:auto,auto,48px 48px,48px 48px;background-attachment:fixed}
+html{scroll-behavior:smooth}
+body{font-family:Onest,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased}
 a{color:inherit;text-decoration:none}
-:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:6px}
-.wrap{max-width:1140px;margin:0 auto;padding:0 1.25rem}
-h1,h2,h3{font-family:var(--head);line-height:1.1;letter-spacing:-.02em}
-h2{font-size:clamp(1.8rem,4vw,2.7rem);font-weight:700;max-width:22ch}
-.glass{background:var(--glass);border:1px solid var(--line);border-radius:20px;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
-section{padding:5.5rem 0}
-.lead{color:var(--mute);max-width:56ch;margin-top:1rem}
-
-/* buttons */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;padding:.85rem 1.4rem;border-radius:12px;font:600 1rem var(--body);border:1px solid var(--line);color:var(--ink);background:var(--glass);cursor:pointer;transition:transform .15s,box-shadow .2s,background .2s}
-.btn:hover{transform:translateY(-1px);background:rgba(255,255,255,.1)}
-.btn.primary{border:0;color:#04101c;background:linear-gradient(120deg,var(--cyan),#7aa5ff 55%,var(--violet));box-shadow:0 0 28px rgba(34,227,255,.35)}
-.btn.primary:hover{box-shadow:0 0 40px rgba(34,227,255,.55);background:linear-gradient(120deg,var(--cyan),#7aa5ff 55%,var(--violet))}
+:focus-visible{outline:3px solid var(--blue);outline-offset:3px;border-radius:8px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+section{padding:88px 0}
+h1,h2,h3{letter-spacing:-.02em;line-height:1.1}
+h1{font-size:clamp(2.4rem,5.6vw,4.2rem);font-weight:800}
+h2{font-size:clamp(1.8rem,3.6vw,2.6rem);font-weight:800;max-width:18ch}
+h3{font-size:1.15rem;font-weight:600}
+p.lead{color:var(--muted);font-size:1.15rem;max-width:46ch}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:inherit;font-weight:600;border:0;border-radius:12px;padding:14px 24px;cursor:pointer;transition:transform .15s,background .15s,box-shadow .15s}
+.btn-primary{background:var(--blue);color:#fff;box-shadow:0 8px 20px -8px rgba(43,80,255,.6)}
+.btn-primary:hover{background:var(--blue-d);transform:translateY(-1px)}
+.btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn-ghost:hover{border-color:var(--ink)}
 
 /* nav */
-header{position:sticky;top:0;z-index:20;padding:.7rem 0;background:rgba(7,11,26,.6);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
-nav{display:flex;align-items:center;justify-content:space-between;gap:1rem}
-.logo{display:flex;align-items:center;gap:.6rem;font:700 1.25rem var(--head)}
-.logo svg{width:28px;height:28px}
-nav ul{display:flex;gap:1.8rem;list-style:none;padding:0;color:var(--mute);font-weight:500}
-nav ul a:hover{color:var(--ink)}
-nav .btn{padding:.6rem 1.1rem}
+header{position:sticky;top:0;z-index:20;background:rgba(246,248,252,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+nav{display:flex;align-items:center;justify-content:space-between;height:68px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.25rem}
+.logo i{width:30px;height:30px;border-radius:9px;background:var(--blue);display:grid;place-items:center}
+.logo svg{width:16px;height:16px}
+.links{display:flex;gap:28px;font-weight:500;color:var(--muted)}
+.links a:hover{color:var(--ink)}
+nav .btn{padding:10px 18px}
 
 /* hero */
-.hero{padding:4.5rem 0 5rem}
-.hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:3rem;align-items:center}
-.hero h1{font-size:clamp(2.4rem,5.6vw,4.3rem);font-weight:800}
-.hero h1 span{background:linear-gradient(110deg,var(--cyan),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
-.cta{display:flex;flex-wrap:wrap;gap:.8rem;margin-top:2rem}
-.trust{display:flex;flex-wrap:wrap;gap:.6rem 1.4rem;margin-top:2rem;color:var(--mute);font-size:.95rem}
-.trust b{color:var(--ok);margin-right:.3rem}
+.hero{padding:72px 0 56px}
+.hero-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:56px;align-items:center}
+.hero h1{margin-bottom:20px}
+.cta-row{display:flex;gap:12px;flex-wrap:wrap;margin:32px 0 20px}
+.proof{color:var(--muted);font-size:.95rem}
+.proof b{color:var(--ink)}
 
-/* live demo */
-.demo{padding:1.5rem;box-shadow:0 20px 80px rgba(139,92,255,.25)}
-.demo h3{font-size:1.1rem;font-weight:600;margin-bottom:.2rem}
-.demo p.sm{color:var(--mute);font-size:.9rem;margin-bottom:1rem}
-.field{display:flex;gap:.5rem}
-.field input{flex:1;min-width:0;padding:.8rem 1rem;border-radius:12px;border:1px solid var(--line);background:rgba(0,0,0,.35);color:var(--ink);font:500 1.05rem ui-monospace,Menlo,Consolas,monospace}
-.field input::placeholder{color:#66709a;font-family:var(--body)}
-.icon-btn{width:48px;border-radius:12px;border:1px solid var(--line);background:var(--glass);color:var(--ink);cursor:pointer;font-size:1.1rem}
-.icon-btn:hover{background:rgba(255,255,255,.12)}
-.meter{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:1rem 0 .6rem}
-.meter i{height:6px;border-radius:6px;background:rgba(255,255,255,.1);transition:background .25s,box-shadow .25s}
-.result{display:flex;justify-content:space-between;gap:1rem;font-size:.95rem;min-height:1.6em}
-.result strong{font-family:var(--head)}
-.gen{margin-top:1.2rem;padding-top:1.1rem;border-top:1px solid var(--line);display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
-.gen label{color:var(--mute);font-size:.9rem;display:flex;align-items:center;gap:.7rem;flex:1;min-width:180px}
-.gen input[type=range]{flex:1;accent-color:var(--cyan)}
-.toast{position:fixed;left:50%;bottom:1.5rem;transform:translate(-50%,20px);opacity:0;padding:.7rem 1.1rem;border-radius:12px;background:#10183a;border:1px solid var(--line);transition:.25s;pointer-events:none;z-index:50}
-.toast.show{opacity:1;transform:translate(-50%,0)}
+.dash{background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:26px;box-shadow:0 30px 60px -30px rgba(15,27,45,.25)}
+.dash-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.dash small{color:var(--muted);font-size:.85rem}
+.bal{font-size:2.3rem;font-weight:800;letter-spacing:-.03em}
+.delta{display:inline-block;font-size:.85rem;font-weight:600;color:#0B8B64;background:var(--mint-t);border-radius:99px;padding:2px 10px;margin-left:6px;vertical-align:middle}
+.seg{display:flex;background:var(--bg);border-radius:10px;padding:3px}
+.seg button{font:inherit;font-size:.85rem;font-weight:600;border:0;background:none;color:var(--muted);padding:6px 12px;border-radius:8px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(15,27,45,.12)}
+.chart{display:flex;align-items:flex-end;gap:10px;height:170px;margin:26px 0 8px}
+.col{flex:1;display:flex;flex-direction:column;justify-content:flex-end;gap:4px;height:100%}
+.col span{display:block;border-radius:6px;transition:height .5s cubic-bezier(.2,.8,.2,1)}
+.col .in{background:var(--blue)}
+.col .out{background:var(--blue-t)}
+.labels{display:flex;gap:10px;font-size:.75rem;color:var(--muted)}
+.labels span{flex:1;text-align:center}
+.legend{display:flex;gap:18px;font-size:.85rem;color:var(--muted);margin-top:14px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px}
 
 /* logos strip */
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;padding:1.4rem;text-align:center}
-.stats b{display:block;font:700 1.9rem var(--head);background:linear-gradient(110deg,var(--cyan),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
-.stats span{color:var(--mute);font-size:.92rem}
+.strip{padding:28px 0;border-block:1px solid var(--line);background:var(--surface)}
+.strip .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;color:var(--muted);font-weight:500}
+.strip b{color:var(--ink);font-size:1.4rem;font-weight:800;margin-right:8px}
 
 /* features */
-.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;margin-top:2.6rem}
-.feat{padding:1.6rem;transition:border-color .2s,transform .2s}
-.feat:hover{border-color:rgba(34,227,255,.5);transform:translateY(-3px)}
-.feat svg{width:34px;height:34px;stroke:var(--cyan);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;margin-bottom:1rem;filter:drop-shadow(0 0 8px rgba(34,227,255,.55))}
-.feat h3{font-size:1.15rem;font-weight:600;margin-bottom:.4rem}
-.feat p{color:var(--mute);font-size:.98rem}
+.head{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap;margin-bottom:40px}
+.feat{display:grid;grid-template-columns:.9fr 1.1fr;gap:24px}
+.tabs{display:flex;flex-direction:column;gap:12px}
+.tab{text-align:left;font:inherit;background:var(--surface);border:1.5px solid var(--line);border-radius:var(--r);padding:20px 22px;cursor:pointer;transition:border-color .2s,box-shadow .2s}
+.tab:hover{border-color:#C5CEDD}
+.tab[aria-selected="true"]{border-color:var(--blue);box-shadow:0 0 0 4px var(--blue-t)}
+.tab p{color:var(--muted);font-size:.95rem;margin-top:4px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:30px;min-height:360px}
+.panel h3{font-size:1.4rem;margin-bottom:6px}
+.panel>p{color:var(--muted);margin-bottom:22px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-top:1px solid var(--line)}
+.row b{font-weight:600}
+.row small{color:var(--muted);display:block}
+.tag{font-size:.8rem;font-weight:600;border-radius:99px;padding:3px 11px;white-space:nowrap}
+.t-ok{background:var(--mint-t);color:#0B8B64}.t-wait{background:#FFF1D6;color:#9A6200}.t-info{background:var(--blue-t);color:var(--blue-d)}
+.bar{height:10px;background:var(--bg);border-radius:99px;overflow:hidden;margin-top:8px}
+.bar i{display:block;height:100%;background:var(--blue);border-radius:99px;transition:width .6s}
+.fade{animation:sw .35s ease}
+@keyframes sw{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;counter-reset:s}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:28px;counter-increment:s}
+.step::before{content:counter(s);display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:var(--blue);color:#fff;font-weight:800;margin-bottom:18px}
+.step p{color:var(--muted);margin-top:6px}
 
 /* pricing */
-.toggle{display:inline-flex;margin-top:1.8rem;padding:4px;border-radius:999px}
-.toggle button{border:0;background:none;color:var(--mute);padding:.55rem 1.2rem;border-radius:999px;font:600 .95rem var(--body);cursor:pointer}
-.toggle button[aria-pressed=true]{background:linear-gradient(120deg,var(--cyan),var(--violet));color:#04101c}
-.toggle em{font-style:normal;font-size:.8rem;margin-left:.3rem}
-.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;margin-top:2rem;align-items:stretch}
-.plan{padding:1.8rem;display:flex;flex-direction:column;gap:.4rem}
-.plan.hot{border-color:var(--cyan);box-shadow:0 0 50px rgba(34,227,255,.2)}
-.plan h3{font-size:1.2rem}
-.plan .price{font:800 2.6rem var(--head);margin-top:.6rem}
-.plan .price small{font:500 .95rem var(--body);color:var(--mute)}
-.plan p{color:var(--mute);font-size:.95rem;min-height:3em}
-.plan .btn{margin-top:auto}
-.tbl{margin-top:2.2rem;overflow-x:auto;padding:.5rem 1rem}
-table{width:100%;border-collapse:collapse;min-width:620px}
-th,td{padding:.9rem .6rem;text-align:center;border-bottom:1px solid var(--line);font-size:.98rem}
-th:first-child,td:first-child{text-align:left;color:var(--ink)}
-th{font:600 1rem var(--head)}
-tr:last-child td{border-bottom:0}
-td{color:var(--mute)}
-.y{color:var(--ok);font-weight:700}.n{color:#4b557c}
+.price-head{text-align:center;display:flex;flex-direction:column;align-items:center;gap:20px;margin-bottom:40px}
+.price-head h2{max-width:none}
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:stretch}
+.plan{background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:30px;display:flex;flex-direction:column}
+.plan.hot{border:2px solid var(--blue);box-shadow:0 24px 50px -28px rgba(43,80,255,.5)}
+.plan .amt{font-size:2.6rem;font-weight:800;letter-spacing:-.03em;margin:14px 0 2px}
+.plan .amt small{font-size:1rem;font-weight:500;color:var(--muted)}
+.plan ul{list-style:none;padding:0;margin:22px 0 28px;display:grid;gap:10px;flex:1}
+.plan li{padding-left:28px;position:relative;color:var(--muted)}
+.plan li::before{content:"";position:absolute;left:0;top:5px;width:16px;height:16px;border-radius:50%;background:var(--mint-t) url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path d='m4.5 8.3 2.2 2.2 4.8-5' stroke='%230B8B64' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>")}
+.plan .btn{width:100%}
 
-/* testimonials */
-.quotes{margin-top:2.4rem;position:relative}
-.slide{display:none;padding:2.2rem;max-width:760px}
-.slide.on{display:block;animation:fade .4s}
-@keyframes fade{from{opacity:0}to{opacity:1}}
-.slide blockquote{font:500 clamp(1.15rem,2.4vw,1.5rem)/1.45 var(--head);letter-spacing:-.01em}
-.who{display:flex;align-items:center;gap:.9rem;margin-top:1.6rem}
-.av{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font:700 1rem var(--head);color:#04101c;background:linear-gradient(135deg,var(--cyan),var(--violet))}
-.who small{display:block;color:var(--mute)}
-.q-ctrl{display:flex;align-items:center;gap:.6rem;margin-top:1.2rem}
-.dot{width:10px;height:10px;border-radius:50%;border:0;background:rgba(255,255,255,.2);cursor:pointer;padding:0}
-.dot.on{background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
-
-/* faq + final cta */
-.faq{margin-top:2.2rem;max-width:760px;display:grid;gap:.7rem}
-details{padding:1.1rem 1.3rem}
-summary{cursor:pointer;font:600 1.05rem var(--head);list-style:none;display:flex;justify-content:space-between;gap:1rem}
+/* faq */
+.faq{max-width:780px;margin:0 auto}
+details{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:4px 22px;margin-bottom:10px}
+summary{cursor:pointer;font-weight:600;padding:16px 0;list-style:none;display:flex;justify-content:space-between;gap:16px}
 summary::-webkit-details-marker{display:none}
-summary::after{content:'+';color:var(--cyan);font-size:1.4rem;line-height:1}
-details[open] summary::after{content:'–'}
-details p{color:var(--mute);margin-top:.7rem}
-.final{text-align:center;padding:3.5rem 1.5rem;margin:1rem 0 4rem;box-shadow:0 0 80px rgba(139,92,255,.25)}
-.final h2{margin:0 auto}
-.final .cta{justify-content:center}
-footer{border-top:1px solid var(--line);padding:2rem 0;color:var(--mute);font-size:.92rem}
-footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem}
-footer nav,footer ul{display:flex;gap:1.4rem;list-style:none;padding:0}
+summary::after{content:"+";font-size:1.4rem;line-height:1;color:var(--blue);transition:transform .2s}
+details[open] summary::after{transform:rotate(45deg)}
+details p{color:var(--muted);padding-bottom:18px}
+
+/* final cta */
+.final{background:var(--blue);color:#fff;border-radius:32px;padding:64px 40px;text-align:center}
+.final h2{margin:0 auto 14px;max-width:20ch}
+.final p{opacity:.85;margin-bottom:28px}
+.form{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;max-width:520px;margin:0 auto}
+.form input{flex:1 1 240px;font:inherit;padding:14px 18px;border-radius:12px;border:2px solid transparent;background:#fff;color:var(--ink)}
+.form input[aria-invalid="true"]{border-color:#FF8A8A}
+.form .btn{background:var(--ink);color:#fff}
+.form .btn:hover{background:#000}
+.msg{min-height:1.5em;margin-top:14px;font-weight:500}
+
+footer{padding:40px 0;color:var(--muted);font-size:.9rem}
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
 
 @media(max-width:900px){
-  .hero .wrap,.features-grid,.plans{grid-template-columns:1fr}
-  .stats{grid-template-columns:repeat(2,1fr)}
-  nav ul{display:none}
-  section{padding:4rem 0}
+  .hero-grid,.feat,.plans,.steps{grid-template-columns:1fr}
+  .links{display:none}
+  section{padding:64px 0}
+  .final{padding:48px 22px}
 }
-@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
 
 <header>
   <div class="wrap">
-    <nav aria-label="Main">
-      <a class="logo" href="#top" aria-label="CyberShield home">
-        <svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M16 3l11 4v8c0 7-4.6 12.3-11 14C9.6 27.300 5 22 5 15V7l11-4z" stroke="url(#g)" stroke-width="2" stroke-linejoin="round"/><path d="M11 16l3.5 3.500L21 12.500" stroke="#22e3ff" stroke-width="2.200" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="g" x1="5" y1="3" x2="27" y2="29"><stop stop-color="#22e3ff"/><stop offset="1" stop-color="#8b5cff"/></linearGradient></defs></svg>
-        CyberShield
-      </a>
-      <ul>
-        <li><a href="#features">Features</a></li>
-        <li><a href="#pricing">Pricing</a></li>
-        <li><a href="#reviews">Reviews</a></li>
-        <li><a href="#faq">FAQ</a></li>
-      </ul>
-      <a class="btn primary" href="#pricing">Start free</a>
+    <nav aria-label="Головна навігація">
+      <a href="#top" class="logo"><i><svg viewBox="0 0 16 16"><path d="M4 2v12M11 3 6.5 8l4.5 5" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></i>Каса</a>
+      <div class="links"><a href="#features">Можливості</a><a href="#how">Як це працює</a><a href="#pricing">Тарифи</a><a href="#faq">Питання</a></div>
+      <a href="#start" class="btn btn-primary">Спробувати безкоштовно</a>
     </nav>
   </div>
 </header>
 
 <main id="top">
 <section class="hero">
-  <div class="wrap">
+  <div class="wrap hero-grid">
     <div>
-      <h1>Passwords your team never has to <span>think about</span></h1>
-      <p class="lead">CyberShield stores, fills and protects every login with zero-knowledge encryption. Set it up in five minutes, and your whole company is covered.</p>
-      <div class="cta">
-        <a class="btn primary" href="#pricing">Start free for 14 days</a>
-        <a class="btn" href="#features">See how it works</a>
+      <h1>Бачте, скільки грошей у вас насправді.</h1>
+      <p class="lead">Каса виставляє рахунки, рахує витрати й нагадує про податки. Ви працюєте — гроші під контролем.</p>
+      <div class="cta-row">
+        <a href="#start" class="btn btn-primary">Спробувати безкоштовно</a>
+        <a href="#features" class="btn btn-ghost">Подивитись можливості</a>
       </div>
-      <div class="trust">
-        <span><b>✓</b>AES-256 encryption</span>
-        <span><b>✓</b>SOC 2 and GDPR ready</span>
-        <span><b>✓</b>No credit card needed</span>
-      </div>
+      <p class="proof"><b>14 днів</b> без картки. Скасувати можна в один клік.</p>
     </div>
 
-    <div class="glass demo" aria-labelledby="demo-title">
-      <h3 id="demo-title">Test your password</h3>
-      <p class="sm">Runs in your browser. Nothing you type is sent anywhere.</p>
-      <div class="field">
-        <input id="pw" type="text" placeholder="Type a password to check" autocomplete="off" spellcheck="false" aria-label="Password to test">
-        <button class="icon-btn" id="copy" title="Copy password" aria-label="Copy password">⧉</button>
+    <div class="dash" aria-label="Демо: рух грошей">
+      <div class="dash-top">
+        <div>
+          <small>Баланс за період</small><br>
+          <span class="bal" id="bal">₴0</span><span class="delta" id="delta">+0%</span>
+        </div>
+        <div class="seg" role="group" aria-label="Період">
+          <button aria-pressed="true" data-r="week">Тиждень</button>
+          <button aria-pressed="false" data-r="month">Місяць</button>
+          <button aria-pressed="false" data-r="year">Рік</button>
+        </div>
       </div>
-      <div class="meter" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-      <div class="result" aria-live="polite"><strong id="lvl">Waiting for input</strong><span id="eta"></span></div>
-      <div class="gen">
-        <label>Length <input id="len" type="range" min="8" max="40" value="20"> <span id="lenv">20</span></label>
-        <button class="btn primary" id="gen" style="padding:.65rem 1.1rem">Generate strong password</button>
-      </div>
+      <div class="chart" id="chart"></div>
+      <div class="labels" id="labels"></div>
+      <div class="legend"><span><i style="background:var(--blue)"></i>Надходження</span><span><i style="background:var(--blue-t)"></i>Витрати</span></div>
     </div>
   </div>
 </section>
 
-<div class="wrap">
-  <div class="glass stats">
-    <div><b data-n="250000">0</b><span>teams protected</span></div>
-    <div><b data-n="12">0</b><span>million passwords secured</span></div>
-    <div><b data-n="99.99" data-d="2">0</b><span>% uptime, last 12 months</span></div>
-    <div><b data-n="0">0</b><span>passwords readable by us</span></div>
+<div class="strip">
+  <div class="wrap">
+    <span><b>12 000+</b>фрилансерів і ФОП</span>
+    <span><b>₴2,4 млрд</b>проведено через рахунки</span>
+    <span><b>4,8</b>середня оцінка в магазинах</span>
+    <span><b>3 хв</b>на перший рахунок</span>
   </div>
 </div>
 
 <section id="features">
   <div class="wrap">
-    <h2>Security that stays out of your way</h2>
-    <p class="lead">Strong protection only works when people actually use it. CyberShield is built to be the fastest option, not the most annoying one.</p>
-    <div class="features-grid">
-      <article class="glass feat">
-        <svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>
-        <h3>Zero-knowledge vault</h3>
-        <p>Data is encrypted on your device before it syncs. Only you hold the key, so we can’t read it even if we wanted to.</p>
-      </article>
-      <article class="glass feat">
-        <svg viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg>
-        <h3>Instant autofill</h3>
-        <p>Logins fill in under a second on web and mobile, including apps and in-browser payment forms.</p>
-      </article>
-      <article class="glass feat">
-        <svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.400 8-8 9-4.600-1-8-4-8-9V6l8-3z"/><path d="M12 8v4M12 15v.01"/></svg>
-        <h3>Breach alerts</h3>
-        <p>We watch known leaks around the clock and tell you which accounts are exposed and how to fix them.</p>
-      </article>
-      <article class="glass feat">
-        <svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.500"/><path d="M2 20c0-3.500 3-6 7-6s7 2.500 7 6"/><path d="M17 11a3 3 0 100-6M22 20c0-2.500-1.800-4.500-4.500-5.300"/></svg>
-        <h3>Team sharing</h3>
-        <p>Share logins without sharing the password itself. Revoke access in one click when someone leaves.</p>
-      </article>
-      <article class="glass feat">
-        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 14h3"/></svg>
-        <h3>Admin dashboard</h3>
-        <p>See weak, reused and old passwords across the company, and enforce policies without chasing people.</p>
-      </article>
-      <article class="glass feat">
-        <svg viewBox="0 0 24 24"><path d="M12 11c1.700 0 3 1.300 3 3v3M9 17v-3c0-1.700 1.300-3 3-3"/><path d="M7 8a5 5 0 0110 0M5 21h14"/><path d="M12 14v7"/></svg>
-        <h3>Passkeys and 2FA</h3>
-        <p>Sign in with biometrics or a hardware key. Built-in authenticator codes keep everything in one place.</p>
-      </article>
+    <div class="head">
+      <h2>Усе, що потрібно для грошей, — під рукою</h2>
+      <p class="lead">Оберіть розділ і подивіться, як це виглядає в застосунку.</p>
+    </div>
+    <div class="feat">
+      <div class="tabs" role="tablist" aria-label="Можливості">
+        <button class="tab" role="tab" aria-selected="true" data-f="invoices"><h3>Рахунки та акти</h3><p>Надсилайте за хвилину, бачте, хто вже заплатив.</p></button>
+        <button class="tab" role="tab" aria-selected="false" data-f="expenses"><h3>Витрати</h3><p>Чеки розкладаються по категоріях самі.</p></button>
+        <button class="tab" role="tab" aria-selected="false" data-f="taxes"><h3>Податки</h3><p>Каса рахує суму й нагадує до дедлайну.</p></button>
+        <button class="tab" role="tab" aria-selected="false" data-f="reports"><h3>Звіти</h3><p>Дохід, прибуток і прогноз на наступний місяць.</p></button>
+      </div>
+      <div class="panel" id="panel" role="tabpanel" aria-live="polite"></div>
     </div>
   </div>
 </section>
 
-<section id="pricing">
+<section id="how" style="padding-top:0">
   <div class="wrap">
-    <h2>Simple pricing that scales with your team</h2>
-    <p class="lead">Start free. Upgrade when you need sharing, reports and priority support.</p>
-    <div class="glass toggle" role="group" aria-label="Billing period">
-      <button id="bm" aria-pressed="false">Monthly</button>
-      <button id="by" aria-pressed="true">Yearly <em>save 25%</em></button>
+    <div class="head"><h2>Старт за три кроки</h2></div>
+    <div class="steps">
+      <div class="step"><h3>Підключіть рахунок</h3><p>Додайте картку або ФОП-рахунок. Дані лише для читання.</p></div>
+      <div class="step"><h3>Виставте перший інвойс</h3><p>Оберіть шаблон, вкажіть суму — клієнт отримає посилання на оплату.</p></div>
+      <div class="step"><h3>Слідкуйте за цифрами</h3><p>Баланс, податки й нагадування оновлюються автоматично.</p></div>
     </div>
+  </div>
+</section>
 
+<section id="pricing" style="padding-top:0">
+  <div class="wrap">
+    <div class="price-head">
+      <h2>Тарифи без сюрпризів</h2>
+      <div class="seg" role="group" aria-label="Оплата">
+        <button aria-pressed="false" data-b="m">Щомісяця</button>
+        <button aria-pressed="true" data-b="y">Щороку (−20%)</button>
+      </div>
+    </div>
     <div class="plans">
-      <div class="glass plan">
-        <h3>Free</h3>
-        <div class="price">$0<small> forever</small></div>
-        <p>For trying CyberShield on one device.</p>
-        <a class="btn" href="#top">Create free account</a>
+      <div class="plan">
+        <h3>Старт</h3><div class="amt">₴0</div><small style="color:var(--muted)">назавжди</small>
+        <ul><li>До 5 рахунків на місяць</li><li>Облік витрат</li><li>Мобільний застосунок</li></ul>
+        <a href="#start" class="btn btn-ghost">Почати безкоштовно</a>
       </div>
-      <div class="glass plan hot">
-        <h3>Pro</h3>
-        <div class="price"><span class="amt" data-m="4.99" data-y="3.74">$3.74</span><small> / month</small></div>
-        <p>For individuals and families who want everything unlocked.</p>
-        <a class="btn primary" href="#top">Start 14-day trial</a>
+      <div class="plan hot">
+        <h3>Профі</h3><div class="amt"><span class="p" data-m="399" data-y="319">₴319</span><small> / міс</small></div><small style="color:var(--muted)">для ФОП і фрилансерів</small>
+        <ul><li>Необмежені рахунки й акти</li><li>Розрахунок податків і нагадування</li><li>Звіти та експорт у PDF</li><li>Пріоритетна підтримка</li></ul>
+        <a href="#start" class="btn btn-primary">Спробувати 14 днів</a>
       </div>
-      <div class="glass plan">
-        <h3>Teams</h3>
-        <div class="price"><span class="amt" data-m="8" data-y="6">$6</span><small> / user / month</small></div>
-        <p>For companies that need control, reports and compliance.</p>
-        <a class="btn" href="#top">Start 14-day trial</a>
-      </div>
-    </div>
-
-    <div class="glass tbl">
-      <table>
-        <thead><tr><th scope="col">Compare plans</th><th scope="col">Free</th><th scope="col">Pro</th><th scope="col">Teams</th></tr></thead>
-        <tbody>
-          <tr><td>Devices</td><td>1</td><td>Unlimited</td><td>Unlimited</td></tr>
-          <tr><td>Stored passwords</td><td>50</td><td>Unlimited</td><td>Unlimited</td></tr>
-          <tr><td>Autofill and generator</td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td></tr>
-          <tr><td>Breach alerts</td><td class="n">–</td><td class="y">✓</td><td class="y">✓</td></tr>
-          <tr><td>Passkeys and 2FA codes</td><td class="n">–</td><td class="y">✓</td><td class="y">✓</td></tr>
-          <tr><td>Secure sharing</td><td class="n">–</td><td>5 people</td><td>Unlimited</td></tr>
-          <tr><td>Admin dashboard and policies</td><td class="n">–</td><td class="n">–</td><td class="y">✓</td></tr>
-          <tr><td>SSO and audit logs</td><td class="n">–</td><td class="n">–</td><td class="y">✓</td></tr>
-          <tr><td>Support</td><td>Community</td><td>Email</td><td>Priority, 24/7</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</section>
-
-<section id="reviews">
-  <div class="wrap">
-    <h2>Trusted by people who take security seriously</h2>
-    <div class="quotes">
-      <figure class="glass slide on">
-        <blockquote>“We moved 140 people over in an afternoon. Nobody asked for help, which has never happened with any tool we’ve rolled out.”</blockquote>
-        <figcaption class="who"><span class="av">MK</span><span>Maria Koval<small>Head of IT, Northwind Logistics</small></span></figcaption>
-      </figure>
-      <figure class="glass slide">
-        <blockquote>“The admin dashboard showed us 63 reused passwords on day one. A week later, it was zero.”</blockquote>
-        <figcaption class="who"><span class="av">DR</span><span>Daniel Reyes<small>CTO, Brightlane</small></span></figcaption>
-      </figure>
-      <figure class="glass slide">
-        <blockquote>“Autofill is faster than typing, and it works in the mobile apps too. My whole family switched after I did.”</blockquote>
-        <figcaption class="who"><span class="av">AL</span><span>Anna Lindqvist<small>Freelance designer</small></span></figcaption>
-      </figure>
-      <div class="q-ctrl" role="tablist" aria-label="Choose review">
-        <button class="dot on" aria-label="Review 1"></button>
-        <button class="dot" aria-label="Review 2"></button>
-        <button class="dot" aria-label="Review 3"></button>
+      <div class="plan">
+        <h3>Команда</h3><div class="amt"><span class="p" data-m="899" data-y="719">₴719</span><small> / міс</small></div><small style="color:var(--muted)">до 10 користувачів</small>
+        <ul><li>Усе з тарифу Профі</li><li>Ролі й права доступу</li><li>Спільні категорії витрат</li></ul>
+        <a href="#start" class="btn btn-ghost">Спробувати 14 днів</a>
       </div>
     </div>
   </div>
 </section>
 
-<section id="faq" style="padding-top:2rem">
+<section id="faq" style="padding-top:0">
+  <div class="wrap faq">
+    <div class="head" style="justify-content:center"><h2 style="text-align:center;max-width:none">Часті питання</h2></div>
+    <details><summary>Чи безпечні мої дані?</summary><p>Підключення до банку працює лише на читання, а всі дані шифруються під час передачі й зберігання. Каса не може переказувати гроші без вашого підтвердження.</p></details>
+    <details><summary>Чи підходить Каса для ФОП?</summary><p>Так. Каса враховує групи ФОП, єдиний податок і ЄСВ та нагадує про терміни сплати.</p></details>
+    <details><summary>Що буде після пробного періоду?</summary><p>Ви перейдете на безкоштовний тариф «Старт». Платити почнете лише тоді, коли самі оберете тариф.</p></details>
+    <details><summary>Чи можна експортувати дані?</summary><p>Так, у будь-який момент: у PDF, CSV або в зручному форматі для вашого бухгалтера.</p></details>
+  </div>
+</section>
+
+<section id="start" style="padding-top:0">
   <div class="wrap">
-    <h2>Questions, answered</h2>
-    <div class="faq">
-      <details class="glass"><summary>Can CyberShield see my passwords?</summary><p>No. Your vault is encrypted on your device with a key derived from your master password. We only ever store encrypted data.</p></details>
-      <details class="glass"><summary>What if I forget my master password?</summary><p>You can set up a recovery key during sign-up. Teams admins can also enable account recovery for employees.</p></details>
-      <details class="glass"><summary>Can I import my existing passwords?</summary><p>Yes. Import from browsers and most password managers using a CSV file. It takes about a minute.</p></details>
-      <details class="glass"><summary>Can I cancel any time?</summary><p>Yes. Cancel from your account page, and export your data whenever you like.</p></details>
-    </div>
-    <div class="glass final" style="margin-top:4rem">
-      <h2>Protect your team today</h2>
-      <p class="lead" style="margin-left:auto;margin-right:auto">Create an account in under a minute. Your first 14 days are on us.</p>
-      <div class="cta"><a class="btn primary" href="#pricing">Start free</a><a class="btn" href="#pricing">Talk to sales</a></div>
+    <div class="final">
+      <h2>Почніть керувати грошима вже сьогодні</h2>
+      <p>Залиште e-mail — надішлемо посилання для входу. Картка не потрібна.</p>
+      <form class="form" id="form" novalidate>
+        <input type="email" id="email" placeholder="you@email.com" aria-label="Ваш e-mail" required>
+        <button class="btn" type="submit">Спробувати безкоштовно</button>
+      </form>
+      <div class="msg" id="msg" role="status"></div>
     </div>
   </div>
 </section>
 </main>
 
 <footer>
-  <div class="wrap">
-    <span>© 2026 CyberShield. All rights reserved.</span>
-    <ul><li><a href="#">Privacy</a></li><li><a href="#">Terms</a></li><li><a href="#">Security</a></li><li><a href="#">Contact</a></li></ul>
-  </div>
+  <div class="wrap"><span>© 2026 Каса. Усі права захищено.</span><span>Демонстраційний лендинг</span></div>
 </footer>
-<div class="toast" id="toast" role="status"></div>
 
 <script>
-(function(){
-  var $=function(s,r){return (r||document).querySelector(s)}, $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const fmt=n=>'₴'+Math.round(n).toLocaleString('uk-UA').replace(/\u00a0/g,' ');
 
-  /* toast */
-  var tt; function toast(m){var t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(function(){t.classList.remove('show')},1800)}
+/* Hero chart */
+const DATA={
+  week:{l:['Пн','Вт','Ср','Чт','Пт','Сб','Нд'],i:[62,40,78,55,90,28,35],o:[30,22,35,40,32,14,18],bal:48200,d:12},
+  month:{l:['Т1','Т2','Т3','Т4','Т5','Т6','Т7'],i:[55,70,48,82,66,90,75],o:[35,40,30,50,38,44,36],bal:176500,d:8},
+  year:{l:['Січ','Бер','Тра','Лип','Вер','Жов','Гру'],i:[50,58,66,62,78,86,95],o:[40,42,45,44,50,52,55],bal:2140000,d:21}
+};
+function draw(k){
+  const d=DATA[k];
+  $('#chart').innerHTML=d.i.map((v,j)=>`<div class="col"><span class="out" style="height:${d.o[j]*.9}%"></span><span class="in" style="height:${v*.9}%"></span></div>`).join('');
+  $('#labels').innerHTML=d.l.map(x=>`<span>${x}</span>`).join('');
+  const el=$('#bal'),from=parseInt(el.dataset.v||0),to=d.bal,t0=performance.now();
+  el.dataset.v=to;
+  (function step(t){const p=Math.min((t-t0)/600,1),e=1-Math.pow(1-p,3);el.textContent=fmt(from+(to-from)*e);if(p<1)requestAnimationFrame(step)})(t0);
+  $('#delta').textContent='+'+d.d+'%';
+}
+$$('.dash .seg button').forEach(b=>b.onclick=()=>{
+  $$('.dash .seg button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+  draw(b.dataset.r);
+});
+draw('week');
 
-  /* password strength */
-  var pw=$('#pw'), bars=$$('.meter i'), lvl=$('#lvl'), eta=$('#eta');
-  var common=['password','123456','qwerty','letmein','admin','welcome','iloveyou','111111','abc123','dragon'];
-  function fmt(s){
-    if(s<1)return 'instantly';
-    var u=[['year',31557600],['day',86400],['hour',3600],['minute',60],['second',1]];
-    if(s>31557600*1e9)return 'billions of years';
-    if(s>31557600*1e6)return 'millions of years';
-    if(s>31557600*1e3)return 'thousands of years';
-    for(var i=0;i<u.length;i++){if(s>=u[i][1]){var n=Math.floor(s/u[i][1]);return n+' '+u[i][0]+(n>1?'s':'')}}
-  }
-  function bits(p){
-    var pool=0; if(/[a-z]/.test(p))pool+=26; if(/[A-Z]/.test(p))pool+=26; if(/\d/.test(p))pool+=10; if(/[^A-Za-z0-9]/.test(p))pool+=33;
-    var uniq=new Set(p.split('')).size, b=p.length*Math.log2(pool||1)*(0.4+0.6*uniq/p.length);
-    var low=p.toLowerCase(); common.forEach(function(c){if(low.indexOf(c)>-1)b=Math.min(b,18)});
-    return b;
-  }
-  function check(){
-    var p=pw.value, i, col, name, n;
-    if(!p){bars.forEach(function(b){b.style.background='';b.style.boxShadow=''});lvl.textContent='Waiting for input';lvl.style.color='';eta.textContent='';return}
-    var b=bits(p);
-    if(b<30){n=1;col='var(--bad)';name='Weak'}else if(b<50){n=2;col='var(--warn)';name='Fair'}else if(b<72){n=3;col='var(--cyan)';name='Good'}else{n=4;col='var(--ok)';name='Excellent'}
-    bars.forEach(function(el,k){el.style.background=k<n?col:'';el.style.boxShadow=k<n?'0 0 10px '+col:''});
-    lvl.textContent=name; lvl.style.color=col;
-    eta.textContent='Cracked in '+fmt(Math.pow(2,b)/2/1e10);
-  }
-  pw.addEventListener('input',check);
+/* Feature tabs */
+const rows=a=>a.map(r=>`<div class="row"><div><b>${r[0]}</b><small>${r[1]}</small></div><span class="tag ${r[3]}">${r[2]}</span></div>`).join('');
+const F={
+  invoices:{t:'Рахунки та акти',p:'Останні документи й статус оплати.',h:rows([
+    ['Рахунок №128 · Студія «Лінія»','₴18 500 · до 12 листопада','Оплачено','t-ok'],
+    ['Рахунок №129 · Mova Labs','₴42 000 · до 20 листопада','Очікує','t-wait'],
+    ['Акт №64 · Ресторан «Поділ»','₴9 800 · підписано','Надіслано','t-info']])},
+  expenses:{t:'Витрати',p:'Каса сама визначає категорію за чеком.',h:rows([
+    ['Хмарний сервіс','₴1 240 · автоматично','Софт','t-info'],
+    ['Коворкінг','₴3 500 · щомісяця','Офіс','t-info'],
+    ['Реклама в соцмережах','₴5 200 · 3 чеки','Маркетинг','t-info']])},
+  taxes:{t:'Податки',p:'Скільки сплатити і коли.',h:`<div class="row"><div style="flex:1"><b>Єдиний податок за IV квартал</b><small>₴7 450 · сплатити до 20 січня</small><div class="bar"><i style="width:68%"></i></div></div><span class="tag t-wait">68% накопичено</span></div>`+rows([
+    ['ЄСВ за жовтень','₴1 760','Сплачено','t-ok'],['Декларація','Каса підготує заздалегідь','За 12 днів','t-wait']])},
+  reports:{t:'Звіти',p:'Прибуток і прогноз у кілька дотиків.',h:rows([
+    ['Прибуток за жовтень','₴61 300 · +8% до вересня','Зростання','t-ok'],
+    ['Прогноз на листопад','₴68 000 за поточними рахунками','Прогноз','t-info'],
+    ['Звіт для бухгалтера','PDF і CSV за один клік','Готово','t-ok']])}
+};
+function show(k){
+  const f=F[k];
+  $('#panel').innerHTML=`<div class="fade"><h3>${f.t}</h3><p>${f.p}</p>${f.h}</div>`;
+}
+$$('.tab').forEach(b=>b.onclick=()=>{
+  $$('.tab').forEach(x=>x.setAttribute('aria-selected',x===b));
+  show(b.dataset.f);
+});
+show('invoices');
 
-  /* generator */
-  var len=$('#len'); len.addEventListener('input',function(){$('#lenv').textContent=len.value});
-  $('#gen').addEventListener('click',function(){
-    var set='abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789!@#$%^&*-_=+?', n=+len.value, a=new Uint32Array(n), out='';
-    crypto.getRandomValues(a); for(var i=0;i<n;i++)out+=set[a[i]%set.length];
-    pw.value=out; check();
-  });
-  $('#copy').addEventListener('click',function(){
-    if(!pw.value){toast('Nothing to copy yet');return}
-    (navigator.clipboard?navigator.clipboard.writeText(pw.value):Promise.reject()).then(function(){toast('Password copied')},function(){pw.select();document.execCommand('copy');toast('Password copied')});
-  });
+/* Pricing toggle */
+$$('.price-head .seg button').forEach(b=>b.onclick=()=>{
+  $$('.price-head .seg button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+  const k=b.dataset.b==='y'?'y':'m';
+  $$('.p').forEach(p=>p.textContent=fmt(p.dataset[k]));
+});
 
-  /* billing toggle */
-  function bill(yearly){
-    $('#by').setAttribute('aria-pressed',yearly);$('#bm').setAttribute('aria-pressed',!yearly);
-    $$('.amt').forEach(function(a){var v=+a.dataset[yearly?'y':'m'];a.textContent='$'+(v%1?v.toFixed(2):v)});
-  }
-  $('#bm').onclick=function(){bill(false)}; $('#by').onclick=function(){bill(true)};
-
-  /* testimonials */
-  var slides=$$('.slide'), dots=$$('.dot'), cur=0, timer;
-  function show(i){cur=i;slides.forEach(function(s,k){s.classList.toggle('on',k===i)});dots.forEach(function(d,k){d.classList.toggle('on',k===i)})}
-  dots.forEach(function(d,k){d.onclick=function(){show(k);restart()}});
-  function restart(){clearInterval(timer);if(!matchMedia('(prefers-reduced-motion:reduce)').matches)timer=setInterval(function(){show((cur+1)%slides.length)},7000)}
-  restart();
-
-  /* count-up stats */
-  var io=new IntersectionObserver(function(es){es.forEach(function(e){
-    if(!e.isIntersecting)return; io.unobserve(e.target);
-    var el=e.target, end=+el.dataset.n, d=+(el.dataset.d||0), t0=null;
-    (function step(t){t0=t0||t;var p=Math.min((t-t0)/1200,1),v=end*(1-Math.pow(1-p,3));
-      el.textContent=d?v.toFixed(d):Math.round(v).toLocaleString('en-US')+(end===250000&&p===1?'+':'');
-      if(p<1)requestAnimationFrame(step)})(performance.now());
-  })},{threshold:.6});
-  $$('[data-n]').forEach(function(el){io.observe(el)});
-})();
+/* Signup form */
+$('#form').addEventListener('submit',e=>{
+  e.preventDefault();
+  const i=$('#email'),m=$('#msg'),ok=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(i.value.trim());
+  i.setAttribute('aria-invalid',!ok);
+  m.textContent=ok?'Дякуємо! Перевірте пошту — посилання для входу вже в дорозі.':'Введіть e-mail у форматі name@email.com.';
+  if(ok)i.value='';
+});
 </script>
 </body>
 </html>
