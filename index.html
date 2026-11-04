@@ -17,7 +17,18 @@
 }
 *{box-sizing:border-box;margin:0}
 html{scroll-behavior:smooth}
-body{font-family:Onest,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased}
+body{
+  font-family:Onest,system-ui,sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  /* Заборона виділення тексту та копіювання на рівні стилів */
+  -webkit-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  user-select:none;
+}
 a{color:inherit;text-decoration:none}
 :focus-visible{outline:3px solid var(--blue);outline-offset:3px;border-radius:8px}
 .wrap{max-width:1120px;margin:0 auto;padding:0 24px}
@@ -128,8 +139,7 @@ details p{color:var(--muted);padding-bottom:18px}
 .final h2{margin:0 auto 14px;max-width:20ch}
 .final p{opacity:.85;margin-bottom:28px}
 .form{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;max-width:520px;margin:0 auto}
-.form input{flex:1 1 240px;font:inherit;padding:14px 18px;border-radius:12px;border:2px solid transparent;background:#fff;color:var(--ink)}
-.form input[aria-invalid="true"]{border-color:#FF8A8A}
+.form input{flex:1 1 240px;font:inherit;padding:14px 18px;border-radius:12px;border:2px solid transparent;background:#fff;color:var(--ink);user-select:text;-webkit-user-select:text} /* Дозволяємо ввід в поле форми */
 .form .btn{background:var(--ink);color:#fff}
 .form .btn:hover{background:#000}
 .msg{min-height:1.5em;margin-top:14px;font-weight:500}
@@ -287,6 +297,43 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
 </footer>
 
 <script>
+/* Захист від перегляду коду, інструментів розробника та копіювання */
+document.addEventListener('contextmenu', e => e.preventDefault());
+
+document.addEventListener('keydown', e => {
+  // Блокування клавіші F12
+  if (e.key === 'F12') {
+    e.preventDefault();
+    return false;
+  }
+  // Блокування Ctrl+U (перегляд коду сторінки)
+  if (e.ctrlKey && e.key.toLowerCase() === 'u') {
+    e.preventDefault();
+    return false;
+  }
+  // Блокування Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C (DevTools)
+  if (e.ctrlKey && e.shiftKey && ['i', 'j', 'c'].includes(e.key.toLowerCase())) {
+    e.preventDefault();
+    return false;
+  }
+  // Блокування Ctrl+S (збереження сторінки)
+  if (e.ctrlKey && e.key.toLowerCase() === 's') {
+    e.preventDefault();
+    return false;
+  }
+});
+
+// Додатковий захист від виділення та копіювання через JS
+document.addEventListener('copy', e => e.preventDefault());
+document.addEventListener('cut', e => e.preventDefault());
+document.addEventListener('selectstart', e => {
+  // Дозволяємо виділення тексту лише всередині інпутів (наприклад, для поля введення email)
+  if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+    e.preventDefault();
+  }
+});
+
+
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
 const fmt=n=>'₴'+Math.round(n).toLocaleString('uk-UA').replace(/\u00a0/g,' ');
 
